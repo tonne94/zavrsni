@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+
+
+  mysql:
+    image: mysql
+    container_name: mysql 
+    ports:
+    - "3306:3306"
+    environment:
+    - "MYSQL_ROOT_PASSWORD=root123"
+    - "MYSQL_DATABASE=a8034263_db"
+    networks:
+    - "default"
+    volumes:
+    - ./db:/docker-entrypoint-initdb.d
+
+  web:
+    image: tonne94/repo1:localhost
+    container_name: web 
+    ports:
+    - "80:80"
+    
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin 
+    ports:
+    - "81:80"    
+    links:
+    - "mysql:db"
+    networks:
+    - "default"
+
+sftp:
+    image: atmoz/sftp
+    volumes:
+        - /host/share:/home/foo/share
+    ports:
+        - "22:22"
+    command: user:123
+
+networks:
+  default:
